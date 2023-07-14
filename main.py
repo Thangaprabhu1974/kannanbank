@@ -70,7 +70,7 @@ def predict_loan_eligibility(gender, married, dependents, education, self_employ
     prediction = model.predict(data)
 
     # If the prediction is a probability, use a threshold to make a binary decision
-    return 1 if prediction[0] >= 0.5 else 0  # Assuming that your model outputs probabilities
+    return 1 if prediction[0] >= 1 else 0  # Assuming that your model outputs probabilities
 
 
 
