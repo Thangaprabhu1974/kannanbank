@@ -1,9 +1,11 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 from sklearn.impute import SimpleImputer
-from sklearn.metrics import precision_recall_curve, roc_curve, auc, accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 
 # Load the dataset
 data = pd.read_csv('loan_approval_data_numeric.csv')
@@ -22,38 +24,25 @@ X = imputer.fit_transform(X)
 # Split the data into train and test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
-# Train the model (modify or replace with your preferred model)
-model = DecisionTreeClassifier()
-model.fit(X_train, y_train)
+# Define the models to evaluate
+models = {
+    'Decision Tree': DecisionTreeClassifier(),
+    'Logistic Regression': LogisticRegression(),
+    'Random Forest': RandomForestClassifier(),
+    'Support Vector Machine': SVC()
+}
 
-# Make predictions on the test set
-y_pred = model.predict(X_test)
+# Evaluate each model
+for model_name, model in models.items():
+    # Train the model
+    model.fit(X_train, y_train)
 
-# Evaluate the model
-accuracy = accuracy_score(y_test, y_pred)
-precision = precision_score(y_test, y_pred)
-recall = recall_score(y_test, y_pred)
-f1 = f1_score(y_test, y_pred)
+    # Make predictions on the test set
+    y_pred = model.predict(X_test)
 
-print("Model Evaluation:")
-print(f"Accuracy: {accuracy}")
-print(f"Precision: {precision}")
-print(f"Recall: {recall}")
-print(f"F1 Score: {f1}")
+    # Evaluate the model
+    accuracy = accuracy_score(y_test, y_pred)
 
-# Precision-Recall curve
-precision, recall, thresholds = precision_recall_curve(y_test, y_pred)
-plt.plot(recall, precision, marker='.')
-plt.xlabel('Recall')
-plt.ylabel('Precision')
-plt.title('Precision-Recall Curve')
-plt.show()
-
-# ROC curve
-fpr, tpr, thresholds = roc_curve(y_test, y_pred)
-roc_auc = auc(fpr, tpr)
-plt.plot(fpr, tpr, marker='.')
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('ROC Curve (AUC = %0.2f)' % roc_auc)
-plt.show()
+    print(f"Model: {model_name}")
+    print(f"Accuracy: {accuracy}")
+    print("------")

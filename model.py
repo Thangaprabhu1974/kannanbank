@@ -48,5 +48,3 @@ if __name__ == '__main__':
             file.write(f"Error: {str(e)}\n")
             file.write(traceback.format_exc())
 
-    # Train the model
-    train_model()
